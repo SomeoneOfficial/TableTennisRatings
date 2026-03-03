@@ -107,6 +107,17 @@
   .match-setup { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px; }
   .match-setup h2 { font-size: 1.6rem; margin-bottom: 20px; color: var(--accent); }
   .match-grid { display: grid; grid-template-columns: 1fr auto 1fr; gap: 16px; align-items: center; margin-bottom: 20px; }
+  @media (max-width: 640px) {
+  .match-grid {
+    grid-template-columns: 1fr; /* stack vertically */
+  }
+  .vs-badge {
+    margin: 8px 0;
+  }
+  .btn-sm {
+    padding: 10px 14px; /* bigger tap targets for thumbs */
+  }
+}
   .vs-badge {
     font-family: 'Bebas Neue', sans-serif; font-size: 2rem; color: var(--accent2);
     text-align: center;
@@ -387,7 +398,7 @@
   <!-- HISTORY TAB -->
   <div id="tab-history" class="tab-content" style="display:none">
     <div class="DeleteHistory" style="display:flex;justify-content:flex-end;margin-bottom:12px;">
-      <button class="btn btn-danger btn-sm" onclick="deleteHistory()">🗑</button>
+      <button class="btn btn-danger btn-sm" onclick="deleteHistory()">🗑 Delete ALL</button>
     </div>
 
 
@@ -696,15 +707,13 @@ function deletePlayer(id) {
   showToast('Player removed.', '');
 }
 
-function deleteHistory(id) {
-  const h = state.history.find(x=>x.id===id);
-  if (!confirm('Delete this match from history? This cannot be undone.')) return;
-  
-  state.history = state.history.filter(x=>x.id!==id);
-  console.log('Deleted history entry:', h);
+function deleteHistory() {
+  if (!confirm('Delete ALL history? This cannot be undone.')) return;
+  state.history = [];
+  console.log('Deleted all history entries');
   renderAll();
   
-  showToast('Match history entry deleted.', '');
+  showToast('All match history deleted.', '');
 }
 
 function openEdit(id) {
