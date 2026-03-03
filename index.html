@@ -35,8 +35,8 @@
     color: var(--text);
     font-family: 'DM Sans', sans-serif;
     min-height: 100vh;
-    background-image: radial-gradient(ellipse at 20% 0%, #1a1a2e 0%, transparent 60%),
-                      radial-gradient(ellipse at 80% 100%, #1a0a0a 0%, transparent 60%);
+    background-image: radial-gradient(ellipse at 20% 0%, #0000ff75 0%, transparent 60%),
+                      radial-gradient(ellipse at 80% 100%, #ff000072 0%, transparent 60%);
   }
   h1, h2, h3 { font-family: 'Bebas Neue', sans-serif; letter-spacing: 0.05em; }
 
@@ -385,8 +385,14 @@
 
   <!-- HISTORY TAB -->
   <div id="tab-history" class="tab-content" style="display:none">
+    <div class="DeleteHistory" style="display:flex;justify-content:flex-end;margin-bottom:12px;">
+      <button class="btn btn-danger btn-sm" onclick="deleteHistory()">🗑</button>
+    </div>
+
+
     <div class="history-list" id="history-list"></div>
   </div>
+  
 </div>
 
 <!-- EDIT MODAL -->
@@ -640,13 +646,21 @@ function renderMatchSelects() {
 }
 
 function renderHistory() {
+  
   const list = document.getElementById('history-list');
+  
+  
   if (state.history.length === 0) {
     list.innerHTML = '<div class="empty-state"><div class="icon">📜</div><p>No matches logged yet.</p></div>';
+    
     return;
   }
+
+
   list.innerHTML = [...state.history].reverse().map(h => `
+
     <div class="history-item">
+
       <div class="timestamp">${h.time}</div>
       <div class="match-desc">
         <strong>${h.p1name}</strong> vs <strong>${h.p2name}</strong>${h.context ? ` · ${h.context}` : ''}
@@ -679,6 +693,17 @@ function deletePlayer(id) {
   state.players = state.players.filter(x=>x.id!==id);
   renderAll();
   showToast('Player removed.', '');
+}
+
+function deleteHistory(id) {
+  const h = state.history.find(x=>x.id===id);
+  if (!confirm('Delete this match from history? This cannot be undone.')) return;
+  
+  state.history = state.history.filter(x=>x.id!==id);
+  console.log('Deleted history entry:', h);
+  renderAll();
+  
+  showToast('Match history entry deleted.', '');
 }
 
 function openEdit(id) {
@@ -818,6 +843,7 @@ function applyChanges() {
   const now = new Date();
   const lhTag = [p1lh ? p1.name+' (LH)' : '', p2lh ? p2.name+' (LH)' : ''].filter(Boolean).join(', ');
   state.history.push({
+    id: state.nextId++,
     time: now.toLocaleDateString('en-US',{month:'short',day:'numeric'}) + ' ' + now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}),
     p1name: p1.name, p2name: p2.name, p1delta, p2delta, reasoning, context,
     mode: judgeMode, lhTag
