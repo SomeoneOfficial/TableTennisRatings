@@ -14,7 +14,7 @@
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RankMaster AI</title>
+<title>RankMaster</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -266,7 +266,7 @@
 <body>
 <div class="app">
   <header>
-    <div class="logo">Rank<span>Master</span> <small style="font-size:1rem;color:var(--muted);font-family:'DM Sans',sans-serif;letter-spacing:0">AI</small></div>
+    <div class="logo">Rank<span>Master</span> <small style="font-size:1rem;color:var(--muted);font-family:'DM Sans',sans-serif;letter-spacing:0"></small></div>
     <div class="header-actions">
       <button class="btn btn-secondary" onclick="downloadJSON()">⬇ Export JSON</button>
       <label class="btn btn-secondary" style="cursor:pointer">⬆ Import JSON<input type="file" accept=".json" onchange="importJSON(event)" style="display:none"></label>
@@ -289,8 +289,8 @@
   <div id="tab-match" class="tab-content" style="display:none">
     <div class="match-setup">
       <h2>&#9876;&#65039; Log a Match</h2>
-
-      <!-- JUDGE MODE SELECTOR -->
+ 
+     <!-- JUDGE MODE SELECTOR -->
       <div class="judge-mode-bar">
         <div class="mode-label">Judge Mode</div>
         <div class="mode-pill">
@@ -299,7 +299,8 @@
         </div>
       </div>
 
-      <div class="algo-info" id="algo-info" style="display:block">
+
+<div class="algo-info" id="algo-info" style="display:block">
         <strong>&#x2699;&#xFE0F; Offline Algorithm</strong> — Uses ELO-inspired math: rating difference, score margin, and handicap bonuses all factor in. No internet needed, instant results.
       </div>
 
@@ -343,7 +344,7 @@
         <div style="flex:0 0 140px;">
           <label style="font-size:0.78rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:6px">&#x2728; Points Multiplier</label>
           <div style="display:flex;align-items:center;gap:8px;">
-            <input type="range" id="points-multiplier" min="0.25" max="4" step="0.25" value="1" oninput="document.getElementById('mult-display').textContent=parseFloat(this.value).toFixed(2)+'x'" style="flex:1;accent-color:var(--accent);cursor:pointer;">
+            <input type="range" id="points-multiplier" min="0.25" max="5" step="0.25" value="1" oninput="document.getElementById('mult-display').textContent=parseFloat(this.value).toFixed(2)+'x'" style="flex:1;accent-color:var(--accent);cursor:pointer;">
             <span id="mult-display" style="font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:var(--accent);min-width:44px;text-align:right;">1.00x</span>
           </div>
           <div style="font-size:0.72rem;color:var(--muted);margin-top:3px;">Scales all point changes</div>
