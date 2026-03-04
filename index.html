@@ -64,6 +64,12 @@ header{
 }
 .logo{font-family:'Bebas Neue',sans-serif;font-size:2.6rem;line-height:1;letter-spacing:.08em;}
 .logo span{color:var(--accent);}
+.ver-chip{
+  display:inline-flex;align-items:center;margin-left:8px;
+  font-family:'Barlow Condensed',sans-serif;font-size:.62rem;font-weight:700;
+  color:var(--accent);border:1px solid rgba(240,192,64,.45);
+  padding:2px 6px;border-radius:999px;vertical-align:middle;letter-spacing:.08em;
+}
 .logo small{font-family:'Barlow Condensed',sans-serif;font-size:.75rem;color:var(--muted);letter-spacing:.2em;text-transform:uppercase;display:block;margin-top:-4px;}
 .header-actions{display:flex;gap:8px;flex-wrap:wrap;}
 
@@ -656,7 +662,7 @@ body.bonus-fx .card,body.bonus-fx .card-lg{box-shadow:0 0 0 1px rgba(90,180,240,
 <div class="app">
 <header>
   <div>
-    <div class="logo">Rank<span>Master</span></div>
+    <div class="logo">Rank<span>Master</span><span class="ver-chip">v2.0.0</span></div>
     <small style="font-family:'Barlow Condensed',sans-serif;font-size:.72rem;color:var(--muted);letter-spacing:.18em;text-transform:uppercase">Pro Edition  Track Any Game</small>
   </div>
   <div class="header-actions">
