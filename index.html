@@ -585,7 +585,16 @@ body.bold-titles .title-badge{font-weight:900;letter-spacing:.08em;}
 body.hot-streak-fx .streak-hot{box-shadow:0 0 16px rgba(240,192,64,.35);}
 body.feature-party .card-lg,body.feature-party .settings-section{box-shadow:0 0 0 1px rgba(240,192,64,.25),0 10px 36px rgba(90,180,240,.12);}
 body.bonus-fx .logo span{text-shadow:0 0 20px rgba(240,192,64,.45);}
-body.bonus-fx .card,body.bonus-fx .card-lg{box-shadow:0 0 0 1px rgba(90,180,240,var(--bonus-glow,0.08));}
+body.bonus-fx .card,body.bonus-fx .card-lg{
+  box-shadow:0 0 0 1px rgba(90,180,240,var(--bonus-glow,0.08)),0 8px 24px rgba(0,0,0,.18);
+  border-radius:var(--bonus-radius,12px);
+  border-width:var(--bonus-border,1px);
+}
+body.bonus-fx .player-card{
+  border-color:hsla(calc(200 + var(--bonus-hue-shift,0deg)),80%,65%,.35);
+  box-shadow:0 0 calc(8px + var(--bonus-depth,0px)) rgba(90,180,240,var(--bonus-glow,0.08));
+}
+body.bonus-fx .card-title,.bonus-fx .logo{filter:hue-rotate(var(--bonus-hue-shift,0deg)) saturate(var(--bonus-sat,1));}
 .score-preset-grid{
   display:grid;grid-template-columns:repeat(3,1fr);gap:6px;
 }
@@ -662,7 +671,7 @@ body.bonus-fx .card,body.bonus-fx .card-lg{box-shadow:0 0 0 1px rgba(90,180,240,
 <div class="app">
 <header>
   <div>
-    <div class="logo">Rank<span>Master</span><span class="ver-chip">v2.0.0</span></div>
+    <div class="logo">Rank<span>Master</span><span class="ver-chip">v2.1.0</span></div>
     <small style="font-family:'Barlow Condensed',sans-serif;font-size:.72rem;color:var(--muted);letter-spacing:.18em;text-transform:uppercase">Pro Edition  Track Any Game</small>
   </div>
   <div class="header-actions">
@@ -1341,6 +1350,18 @@ function titleHTML(rating){
 
 // ===================== ALGORITHM =====================
 function parseScore(s){if(!s&&s!==0)return null;const n=parseFloat(String(s).replace(/[^0-9.]/g,''));return isNaN(n)?null:n;}
+function didP1WinMatch(h){
+  const s1=parseScore(h?.p1score),s2=parseScore(h?.p2score);
+  if(s1!==null&&s2!==null&&s1!==s2)return s1>s2;
+  return (h?.p1delta||0)>(h?.p2delta||0);
+}
+function getOutcomeForPlayer(h,pid){
+  if(!h||!pid||h.manualAdjust)return 0;
+  const p1Won=didP1WinMatch(h);
+  if(pid===h.p1id)return p1Won?1:-1;
+  if(pid===h.p2id)return p1Won?-1:1;
+  return 0;
+}
 
 function offlineAlgorithm(p1,p2,p1scoreStr,p2scoreStr,p1lh,p2lh,multiplierOverride){
   const ratingDiff=p1.rating-p2.rating;
@@ -1362,6 +1383,15 @@ function offlineAlgorithm(p1,p2,p1scoreStr,p2scoreStr,p1lh,p2lh,multiplierOverri
   let p2d=Math.round((p1won?Kl:Kw)*(actual2-expected2));
   if(p1lh){p1d+=p1d>0?12:6;}
   if(p2lh){p2d+=p2d>0?12:6;}
+  if(!isDraw){
+    if(p1won){
+      if(p1d<1)p1d=1;
+      if(p2d>-1)p2d=-1;
+    }else{
+      if(p2d<1)p2d=1;
+      if(p1d>-1)p1d=-1;
+    }
+  }
   if(!reasoning){
     const up=Math.abs(actual1-expected1);
     if(isDraw)reasoning=ratingDiff>50?'Draw favours underdog  small rating swing.':'Close draw, minimal changes.';
@@ -1400,14 +1430,15 @@ function updateLiveStats(p1,p2){
   const grid=document.getElementById('live-stats-grid');
   // H2H
   const h2h=state.history.filter(h=>(h.p1id===p1.id&&h.p2id===p2.id)||(h.p1id===p2.id&&h.p2id===p1.id));
-  const p1wins=h2h.filter(h=>(h.p1id===p1.id&&h.p1delta>h.p2delta)||(h.p2id===p1.id&&h.p2delta>h.p1delta)).length;
+  const p1wins=h2h.filter(h=>getOutcomeForPlayer(h,p1.id)>0).length;
   const p2wins=h2h.length-p1wins;
   const streak1=getStreak(p1.id),streak2=getStreak(p2.id);
+  const streakText=s=>!s?'—':`${s.isWin?'🔥 ':''}${s.count}${s.isWin?'W':'L'}`;
   grid.innerHTML=`
     <div class="ls-item"><div class="ls-label">H2H Record</div><div class="ls-val" style="color:var(--accent)">${p1wins}${p2wins}</div></div>
     <div class="ls-item"><div class="ls-label">Total H2H Games</div><div class="ls-val">${h2h.length}</div></div>
-    <div class="ls-item"><div class="ls-label">${p1.name} Streak</div><div class="ls-val" style="color:${streak1?.isWin?'var(--green)':'var(--red)'}">${streak1?`${streak1.count}${streak1.isWin?'W':'L'}`:''}</div></div>
-    <div class="ls-item"><div class="ls-label">${p2.name} Streak</div><div class="ls-val" style="color:${streak2?.isWin?'var(--green)':'var(--red)'}">${streak2?`${streak2.count}${streak2.isWin?'W':'L'}`:''}</div></div>
+    <div class="ls-item"><div class="ls-label">${p1.name} Streak</div><div class="ls-val" style="color:${streak1?.isWin?'var(--green)':'var(--red)'}">${streakText(streak1)}</div></div>
+    <div class="ls-item"><div class="ls-label">${p2.name} Streak</div><div class="ls-val" style="color:${streak2?.isWin?'var(--green)':'var(--red)'}">${streakText(streak2)}</div></div>
   `;
   div.classList.add('show');
 }
@@ -1747,8 +1778,9 @@ function undoLastMatch(){
   if(p1){p1.rating=(p1.rating||0)- (last.p1delta||0);}
   if(p2&&p2.id!==last.p1id){p2.rating=(p2.rating||0)- (last.p2delta||0);}
   if(p1&&p2&&p1.id!==p2.id&&!last.manualAdjust){
-    if((last.p1delta||0)>(last.p2delta||0)){p1.wins=Math.max(0,(p1.wins||0)-1);p2.losses=Math.max(0,(p2.losses||0)-1);}
-    else if((last.p2delta||0)>(last.p1delta||0)){p2.wins=Math.max(0,(p2.wins||0)-1);p1.losses=Math.max(0,(p1.losses||0)-1);}
+    const p1Won=didP1WinMatch(last);
+    if(p1Won){p1.wins=Math.max(0,(p1.wins||0)-1);p2.losses=Math.max(0,(p2.losses||0)-1);}
+    else{p2.wins=Math.max(0,(p2.wins||0)-1);p1.losses=Math.max(0,(p1.losses||0)-1);}
   }
   state.dailyCount=Math.max(0,(state.dailyCount||0)-1);
   renderAll();
@@ -1764,12 +1796,13 @@ function applyChanges(opts){
   }
   const oldR1=p1.rating,oldR2=p2.rating,oldW1=p1.wins||0,oldW2=p2.wins||0;
   p1.rating+=p1delta;p2.rating+=p2delta;
-  if(p1delta>p2delta){p1.wins=(p1.wins||0)+1;p2.losses=(p2.losses||0)+1;}
-  else if(p2delta>p1delta){p2.wins=(p2.wins||0)+1;p1.losses=(p1.losses||0)+1;}
+  const p1sc=document.getElementById('p1-score')?.value??'';
+  const p2sc=document.getElementById('p2-score')?.value??'';
+  const p1WonNow=(parseScore(p1sc)!==null&&parseScore(p2sc)!==null)?(parseScore(p1sc)>parseScore(p2sc)):(p1delta>p2delta);
+  if(p1WonNow){p1.wins=(p1.wins||0)+1;p2.losses=(p2.losses||0)+1;}
+  else{p2.wins=(p2.wins||0)+1;p1.losses=(p1.losses||0)+1;}
   const now=new Date();
   const lhTag=[p1lh?p1.name+' (LH)':'',p2lh?p2.name+' (LH)':''].filter(Boolean).join(', ');
-  const p1sc=document.getElementById('p1-score')?.value||'';
-  const p2sc=document.getElementById('p2-score')?.value||'';
   state.history.push({
     id:state.nextId++,time:formatTime(now),
     p1id:p1.id,p2id:p2.id,p1name:p1.name,p2name:p2.name,
@@ -1848,23 +1881,23 @@ function getStreak(pid){
   const ms=state.history.filter(h=>(h.p1id===pid||h.p2id===pid)&&!h.manualAdjust);
   if(!ms.length)return null;
   const last=ms[ms.length-1];
-  const isWin=(last.p1id===pid&&last.p1delta>last.p2delta)||(last.p2id===pid&&last.p2delta>last.p1delta);
+  const isWin=getOutcomeForPlayer(last,pid)>0;
   let count=1;
   for(let i=ms.length-2;i>=0;i--){
-    const m=ms[i],mw=(m.p1id===pid&&m.p1delta>m.p2delta)||(m.p2id===pid&&m.p2delta>m.p1delta);
+    const m=ms[i],mw=getOutcomeForPlayer(m,pid)>0;
     if(mw===isWin)count++;else break;
   }
   return{isWin,count};
 }
 function streakBadgeHTML(s){
   if(!s||s.count<2)return'';
-  if(s.isWin&&s.count>=5)return`<span class="streak-badge streak-hot"> ${s.count}W STREAK</span>`;
-  if(s.isWin)return`<span class="streak-badge streak-win"> ${s.count}W</span>`;
+  if(s.isWin&&s.count>=5)return`<span class="streak-badge streak-hot">🔥 ${s.count}W STREAK</span>`;
+  if(s.isWin)return`<span class="streak-badge streak-win">🔥 ${s.count}W</span>`;
   return`<span class="streak-badge streak-loss"> ${s.count}L</span>`;
 }
 function getFormDots(pid){
   const ms=state.history.filter(h=>(h.p1id===pid||h.p2id===pid)&&!h.manualAdjust).slice(-6);
-  return ms.map(m=>{const d1=m.p1id===pid?m.p1delta:m.p2delta,d2=m.p1id===pid?m.p2delta:m.p1delta;return d1>d2?'w':d1<d2?'l':'d';});
+  return ms.map(m=>{const o=getOutcomeForPlayer(m,pid);return o>0?'w':o<0?'l':'d';});
 }
 function formDotsHTML(pid){
   const d=getFormDots(pid);if(!d.length)return'';
@@ -1880,7 +1913,7 @@ function getRival(playerId){
     const oname=h.p1id===playerId?h.p2name:h.p1name;
     if(!oppCount[oid])oppCount[oid]={name:oname,count:0,w:0,l:0};
     oppCount[oid].count++;
-    const won=(h.p1id===playerId&&h.p1delta>h.p2delta)||(h.p2id===playerId&&h.p2delta>h.p1delta);
+    const won=getOutcomeForPlayer(h,playerId)>0;
     if(won)oppCount[oid].w++;else oppCount[oid].l++;
   });
   const sorted=Object.entries(oppCount).sort((a,b)=>b[1].count-a[1].count);
@@ -1908,35 +1941,35 @@ function getComeback(playerId){
 function computeAchievements(playerId){
   const p=state.players.find(x=>x.id===playerId);if(!p)return[];
   const ms=state.history.filter(h=>(h.p1id===playerId||h.p2id===playerId)&&!h.manualAdjust);
-  const wins=ms.filter(h=>(h.p1id===playerId&&h.p1delta>h.p2delta)||(h.p2id===playerId&&h.p2delta>h.p1delta)).length;
+  const wins=ms.filter(h=>getOutcomeForPlayer(h,playerId)>0).length;
   const streak=getStreak(playerId);const comeback=getComeback(playerId);
   const upsets=ms.filter(h=>{
     const myRat=h.p1id===playerId?h.p1ratBefore:h.p2ratBefore;
     const oppRat=h.p1id===playerId?h.p2ratBefore:h.p1ratBefore;
-    const won=(h.p1id===playerId&&h.p1delta>h.p2delta)||(h.p2id===playerId&&h.p2delta>h.p1delta);
+    const won=getOutcomeForPlayer(h,playerId)>0;
     return won&&oppRat&&myRat&&(oppRat-myRat)>=100;
   }).length;
-  const lhWins=ms.filter(h=>h.lhTag&&h.lhTag.includes(p.name)&&((h.p1id===playerId&&h.p1delta>h.p2delta)||(h.p2id===playerId&&h.p2delta>h.p1delta))).length;
+  const lhWins=ms.filter(h=>h.lhTag&&h.lhTag.includes(p.name)&&getOutcomeForPlayer(h,playerId)>0).length;
   const maxMargin=Math.max(...ms.map(h=>{
     const s1=parseScore(h.p1score),s2=parseScore(h.p2score);
     if(s1===null||s2===null)return 0;
-    const won=(h.p1id===playerId&&h.p1delta>h.p2delta)||(h.p2id===playerId&&h.p2delta>h.p1delta);
+    const won=getOutcomeForPlayer(h,playerId)>0;
     return won?Math.abs((h.p1id===playerId?s1:s2)-(h.p1id===playerId?s2:s1)):0;
   }).concat([0]));
   const hadPerfect=ms.some(h=>{
     const s1=parseScore(h.p1score),s2=parseScore(h.p2score);
     if(s1===null||s2===null)return false;
-    const won=(h.p1id===playerId&&h.p1delta>h.p2delta)||(h.p2id===playerId&&h.p2delta>h.p1delta);
+    const won=getOutcomeForPlayer(h,playerId)>0;
     if(!won)return false;
     const myScore=h.p1id===playerId?s1:s2,oppScore=h.p1id===playerId?s2:s1;
     return oppScore===0;
   });
-  const seriesWins=ms.filter(h=>h.seriesData&&((h.p1id===playerId&&h.p1delta>h.p2delta)||(h.p2id===playerId&&h.p2delta>h.p1delta))).length;
-  const sweeps=ms.filter(h=>h.seriesData?.wasSwept&&((h.p1id===playerId&&h.p1delta>h.p2delta)||(h.p2id===playerId&&h.p2delta>h.p1delta))).length;
+  const seriesWins=ms.filter(h=>h.seriesData&&getOutcomeForPlayer(h,playerId)>0).length;
+  const sweeps=ms.filter(h=>h.seriesData?.wasSwept&&getOutcomeForPlayer(h,playerId)>0).length;
   const longGames=ms.filter(h=>h.seriesData?.wentFull).length;
   const tourneyWins=(state.tournament?.champion?.id===playerId)?1:0;
   // KOTH defenses
-  const kothDefs=ms.filter(h=>h.kothDefense&&(h.p1id===playerId||h.p2id===playerId)&&((h.p1id===playerId&&h.p1delta>h.p2delta)||(h.p2id===playerId&&h.p2delta>h.p1delta))).length;
+  const kothDefs=ms.filter(h=>h.kothDefense&&(h.p1id===playerId||h.p2id===playerId)&&getOutcomeForPlayer(h,playerId)>0).length;
   const earned=[];
   if(wins>=1)earned.push('first_win');
   if(wins>=5)earned.push('win5');
@@ -2152,9 +2185,27 @@ function applyFeatureEffects(){
   document.body.classList.toggle('bold-titles',!!state.featureFlags?.ft_bold_titles);
   document.body.classList.toggle('hot-streak-fx',!!state.featureFlags?.ft_hot_streak_fx);
   document.body.classList.toggle('feature-party',!!state.featureFlags?.ft_feature_party);
-  const bonusOn=BONUS_FEATURE_TOGGLES.filter(f=>!!state.featureFlags?.[f.id]).length;
+  const activeBonus=BONUS_FEATURE_TOGGLES.filter(f=>!!state.featureFlags?.[f.id]);
+  const bonusOn=activeBonus.length;
   document.body.classList.toggle('bonus-fx',bonusOn>0);
-  document.documentElement.style.setProperty('--bonus-glow',String(Math.min(0.3,bonusOn/280)));
+  let hueSum=0,depthSum=0,radiusSum=0,borderSum=0;
+  activeBonus.forEach(f=>{
+    hueSum+=(f.bonusTheme-4.5)*1.8;
+    depthSum+=(f.bonusStyle%4===0)?1.2:0.5;
+    radiusSum+=(f.bonusStyle===7||f.bonusStyle===3)?0.18:0.08;
+    borderSum+=(f.bonusStyle===1||f.bonusStyle===5)?0.035:0.015;
+  });
+  const hue=Math.max(-28,Math.min(28,hueSum));
+  const depth=Math.min(20,depthSum);
+  const radius=12+Math.min(8,radiusSum);
+  const border=1+Math.min(1.8,borderSum);
+  const sat=(1+Math.min(0.42,bonusOn/180)).toFixed(2);
+  document.documentElement.style.setProperty('--bonus-glow',String(Math.min(0.38,bonusOn/180)));
+  document.documentElement.style.setProperty('--bonus-hue-shift',`${hue}deg`);
+  document.documentElement.style.setProperty('--bonus-depth',`${depth}px`);
+  document.documentElement.style.setProperty('--bonus-radius',`${radius.toFixed(1)}px`);
+  document.documentElement.style.setProperty('--bonus-border',`${border.toFixed(2)}px`);
+  document.documentElement.style.setProperty('--bonus-sat',String(sat));
   const app=document.querySelector('.app');
   if(app)app.style.maxWidth=state.featureFlags?.ft_cinematic_mode?'1180px':'1100px';
 }
@@ -2375,8 +2426,9 @@ function normalizeImportedState(raw){
     if(h.manualAdjust)return;
     const p1=byId[h.p1id],p2=byId[h.p2id];
     if(!p1||!p2)return;
-    if((h.p1delta||0)>(h.p2delta||0)){p1.wins++;p2.losses++;}
-    else if((h.p2delta||0)>(h.p1delta||0)){p2.wins++;p1.losses++;}
+    const p1Won=didP1WinMatch(h);
+    if(p1Won){p1.wins++;p2.losses++;}
+    else{p2.wins++;p1.losses++;}
   });
   if(!out.achievements)out.achievements={};
   if(!out.lowestRatings)out.lowestRatings={};
@@ -2589,8 +2641,8 @@ function saveEdit(){
 function openProfile(id){
   const p=state.players.find(x=>x.id===id);if(!p)return;
   const ms=state.history.filter(h=>(h.p1id===id||h.p2id===id)&&!h.manualAdjust);
-  const wins=ms.filter(h=>(h.p1id===id&&h.p1delta>h.p2delta)||(h.p2id===id&&h.p2delta>h.p1delta)).length;
-  const losses=ms.filter(h=>(h.p1id===id&&h.p1delta<h.p2delta)||(h.p2id===id&&h.p2delta<h.p1delta)).length;
+  const wins=ms.filter(h=>getOutcomeForPlayer(h,id)>0).length;
+  const losses=ms.filter(h=>getOutcomeForPlayer(h,id)<0).length;
   const draws=ms.length-wins-losses;
   const streak=getStreak(id);const rival=getRival(id);const comeback=getComeback(id);
   const winRate=ms.length?Math.round(wins/ms.length*100):0;
@@ -2609,8 +2661,9 @@ function openProfile(id){
   const opps={};
   ms.forEach(h=>{
     const oid=h.p1id===id?h.p2id:h.p1id,on=h.p1id===id?h.p2name:h.p1name;
-    const won=(h.p1id===id&&h.p1delta>h.p2delta)||(h.p2id===id&&h.p2delta>h.p1delta);
-    const lost=(h.p1id===id&&h.p1delta<h.p2delta)||(h.p2id===id&&h.p2delta<h.p1delta);
+    const outcome=getOutcomeForPlayer(h,id);
+    const won=outcome>0;
+    const lost=outcome<0;
     if(!opps[oid])opps[oid]={name:on,w:0,l:0,d:0};
     if(won)opps[oid].w++;else if(lost)opps[oid].l++;else opps[oid].d++;
   });
