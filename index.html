@@ -47,9 +47,9 @@ h1,h2,h3,h4{font-family:'Bebas Neue',sans-serif;letter-spacing:.04em;}
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
 
 /* APP */
-.app{max-width:1100px;margin:0 auto;padding:20px 14px;}
+.app{max-width:1160px;margin:0 auto;padding:24px 18px;}
 @media(max-width:700px){
-  .app{padding:12px 10px;}
+  .app{padding:14px 12px;}
   .card-lg,.card,.settings-section{padding:14px;}
 }
 .app.compact .card-lg{padding:16px;}
@@ -117,8 +117,8 @@ header{
 .tab:hover:not(.active){color:var(--accent);background:rgba(240,192,64,.05);}
 
 /* CARDS */
-.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;}
-.card-lg{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:24px;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:22px;}
+.card-lg{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:26px;}
 .card-title{font-size:1.5rem;color:var(--accent);margin-bottom:16px;}
 
 /* LEADERBOARD */
@@ -205,8 +205,11 @@ header{
 .xp-bar{height:100%;border-radius:2px;transition:width .5s;background:linear-gradient(90deg,var(--accent),var(--accent2));}
 
 /* MATCH TAB */
-.match-layout{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
-@media(max-width:600px){.match-layout{grid-template-columns:1fr;}}
+.match-layout{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:stretch;}
+@media(max-width:600px){
+  .match-layout{grid-template-columns:1fr;}
+  .match-layout .vs-divider{display:none;}
+}
 .player-pick-card{
   background:var(--surface2);border:2px solid var(--border);
   border-radius:14px;padding:18px;transition:border-color .2s;
@@ -356,8 +359,8 @@ header{
 .settings-section h2{font-size:1.4rem;margin-bottom:14px;color:var(--accent);}
 .settings-section h3{font-size:.85rem;color:var(--muted);margin-bottom:10px;text-transform:uppercase;letter-spacing:.08em;}
 .danger-zone{border-color:rgba(240,90,90,.35);}.danger-zone h2{color:var(--red);}
-.settings-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;}
-.settings-action{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px;}
+.settings-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px;}
+.settings-action{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px;}
 .settings-action .sa-title{font-weight:700;font-size:.88rem;margin-bottom:3px;}
 .settings-action .sa-desc{font-size:.76rem;color:var(--muted);margin-bottom:10px;line-height:1.4;}
 
@@ -529,23 +532,23 @@ select:focus{outline:none;border-color:var(--accent);}
 .tool-title{
   font-size:.72rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;
 }
-.feature-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px;}
+.feature-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px;}
 .feature-item{
-  background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:10px;
+  background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px;
   display:flex;align-items:flex-start;gap:8px;
   transition:all .15s;
 }
 .feature-item input{accent-color:var(--accent);margin-top:2px;}
-.feature-item .fi-title{font-size:.8rem;font-weight:700;}
+.feature-item .fi-title{font-size:.84rem;font-weight:700;}
 .feature-item .fi-desc{font-size:.72rem;color:var(--muted);line-height:1.35;}
 .feature-item.active{border-color:rgba(61,214,140,.55);background:rgba(61,214,140,.08);}
 .feature-status{
-  margin-top:8px;padding:8px 10px;border-radius:8px;
+  margin-top:10px;padding:10px 12px;border-radius:8px;
   border:1px solid var(--border);background:var(--surface2);
-  font-size:.78rem;color:var(--muted);
+  font-size:.8rem;color:var(--muted);
 }
 .feature-catalog-toolbar{
-  display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px;
+  display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px;
 }
 .feature-catalog-toolbar input,.feature-catalog-toolbar select{
   background:var(--bg);border:1px solid var(--border);border-radius:7px;color:var(--text);
@@ -553,7 +556,13 @@ select:focus{outline:none;border-color:var(--accent);}
 }
 .feature-catalog-toolbar input{min-width:230px;flex:1;}
 .feature-summary{
-  font-size:.8rem;color:var(--muted);margin-bottom:10px;
+  font-size:.8rem;color:var(--muted);margin-bottom:12px;
+}
+.feature-shell{
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:14px;
 }
 .feature-type-tabs{
   display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;
@@ -584,25 +593,29 @@ body.colorful-badges .ach-badge.earned{box-shadow:0 0 16px rgba(240,192,64,.25);
 body.bold-titles .title-badge{font-weight:900;letter-spacing:.08em;}
 body.hot-streak-fx .streak-hot{box-shadow:0 0 16px rgba(240,192,64,.35);}
 body.feature-party .card-lg,body.feature-party .settings-section{box-shadow:0 0 0 1px rgba(240,192,64,.25),0 10px 36px rgba(90,180,240,.12);}
-body.bonus-fx .logo span{text-shadow:0 0 20px rgba(240,192,64,.45);}
-body.bonus-fx .card,body.bonus-fx .card-lg{
-  box-shadow:0 0 0 1px rgba(90,180,240,var(--bonus-glow,0.08)),0 8px 24px rgba(0,0,0,.18);
-  border-radius:var(--bonus-radius,12px);
-  border-width:var(--bonus-border,1px);
-}
-body.bonus-fx .player-card{
-  border-color:hsla(calc(200 + var(--bonus-hue-shift,0deg)),80%,65%,.35);
-  box-shadow:0 0 calc(8px + var(--bonus-depth,0px)) rgba(90,180,240,var(--bonus-glow,0.08));
-}
-body.bonus-fx .card-title,.bonus-fx .logo{filter:hue-rotate(var(--bonus-hue-shift,0deg)) saturate(var(--bonus-sat,1));}
-.score-preset-grid{
-  display:grid;grid-template-columns:repeat(3,1fr);gap:6px;
-}
 .chip-btn{
   background:var(--surface3);border:1px solid var(--border);color:var(--text);
   border-radius:7px;padding:7px 8px;font-size:.76rem;cursor:pointer;font-weight:700;
 }
 .chip-btn:hover{border-color:var(--accent);color:var(--accent);}
+/* MATCH TOOLBAR BUTTONS */
+.match-toolbar{
+  display:flex;gap:10px;flex-wrap:wrap;margin:-6px 0 14px;
+}
+.match-action-btn{
+  background:linear-gradient(180deg,var(--surface2),#1c1c2f);
+  border:1px solid var(--border2);
+  color:var(--text);
+  border-radius:9px;
+  padding:8px 13px;
+  font-size:.82rem;
+  font-weight:700;
+}
+.match-action-btn:hover{
+  border-color:var(--accent);
+  color:var(--accent);
+  transform:translateY(-1px);
+}
 /* LIVE STATS PANEL */
 .live-stats{
   background:rgba(240,192,64,.05);border:1px solid rgba(240,192,64,.2);
@@ -700,9 +713,11 @@ body.bonus-fx .card-title,.bonus-fx .logo{filter:hue-rotate(var(--bonus-hue-shif
 <div id="tab-match" class="tab-content" style="display:none">
   <div class="card-lg">
     <h2 class="card-title">⚔️ Log a Match</h2>
-    <div style="display:flex;gap:8px;flex-wrap:wrap;margin:-6px 0 14px;">
-      <button class="btn btn-secondary btn-sm" onclick="openSpinner()">🎲 Spin Matchup</button>
-      <button class="btn btn-secondary btn-sm" onclick="swapScores()">🔁 Swap Scores</button>
+    <div class="match-toolbar">
+      <button class="btn match-action-btn" onclick="openSpinner()">🎲 Spin Matchup</button>
+      <button class="btn match-action-btn" onclick="swapScores()">🔁 Swap Scores</button>
+      <button class="btn match-action-btn" onclick="loadPreviousMatchSettings()">🕘 Load Previous Match</button>
+      <button class="btn match-action-btn" id="pred-toggle-btn" onclick="togglePredictionVisibility()">📈 Show Win Probability</button>
     </div>
 
     <!-- Best-of series -->
@@ -738,6 +753,9 @@ body.bonus-fx .card-title,.bonus-fx .logo{filter:hue-rotate(var(--bonus-hue-shif
           <label class="toggle-switch blue"><input type="checkbox" id="p1-lh"><span class="toggle-slider"></span></label>
         </div>
       </div>
+      <div class="vs-divider">
+        <div class="vs-text">VS</div>
+      </div>
 
       <div class="player-pick-card" id="pick-card-2">
         <div class="pick-label" style="color:var(--accent3)"> Player 2</div>
@@ -758,6 +776,12 @@ body.bonus-fx .card-title,.bonus-fx .logo{filter:hue-rotate(var(--bonus-hue-shif
           <label class="toggle-switch blue"><input type="checkbox" id="p2-lh"><span class="toggle-slider"></span></label>
         </div>
       </div>
+    </div>
+
+    <!-- Live stats -->
+    <div class="live-stats" id="live-stats">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:.9rem;color:var(--accent);letter-spacing:.06em;margin-bottom:8px">📊 Head-to-Head Stats</div>
+      <div class="live-stats-grid" id="live-stats-grid"></div>
     </div>
 
     <!-- Prediction -->
@@ -783,12 +807,6 @@ body.bonus-fx .card-title,.bonus-fx .logo{filter:hue-rotate(var(--bonus-hue-shif
         <div class="s-num" id="series-s2" style="color:var(--accent3)">0</div>
       </div>
       <div class="series-dots" id="series-dots"></div>
-    </div>
-
-    <!-- Live stats -->
-    <div class="live-stats" id="live-stats">
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:.9rem;color:var(--accent);letter-spacing:.06em;margin-bottom:8px">📊 Head-to-Head Stats</div>
-      <div class="live-stats-grid" id="live-stats-grid"></div>
     </div>
 
     <!-- Context + options -->
@@ -840,7 +858,6 @@ body.bonus-fx .card-title,.bonus-fx .logo{filter:hue-rotate(var(--bonus-hue-shif
         <div style="display:flex;gap:7px;flex-wrap:wrap;">
           <button class="btn btn-secondary btn-sm" onclick="recalculateResult()" title="Change scores or winner and recalculate">🔄 Recalculate</button>
           <button class="btn btn-secondary btn-sm" onclick="cancelResult()" style="color:var(--red);border-color:rgba(240,90,90,.4);" title="Undo this result and go back">✖ Cancel</button>
-          <button class="btn btn-secondary btn-sm" id="rematch-btn" onclick="queueRematch()" title="Queue same players for next game">♻️ Rematch</button>
         </div>
       </div>
       <div class="rating-changes" id="rating-changes"></div>
@@ -960,30 +977,29 @@ body.bonus-fx .card-title,.bonus-fx .logo{filter:hue-rotate(var(--bonus-hue-shif
 
     <div id="settings-pane-features" class="settings-pane">
       <div class="settings-section">
-        <h2>🧩 Real Features</h2>
+        <h2>🧩 Feature Controls</h2>
         <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
           <button class="btn btn-secondary btn-sm" onclick="featurePackAll(true)">⚡ Enable All</button>
           <button class="btn btn-secondary btn-sm" onclick="featurePackAll(false)">⭕ Disable All</button>
           <button class="btn btn-secondary btn-sm" onclick="featurePackPresetFun()">🎉 Fun Preset</button>
         </div>
-        <div style="font-size:.75rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;">Quick Core Toggles</div>
-        <div class="feature-grid" id="feature-grid" style="margin-bottom:10px;"></div>
-        <div class="feature-type-tabs">
-          <button class="feature-type-tab active" data-ftype="core" onclick="switchFeatureTypeTab('core')">Core Features</button>
-          <button class="feature-type-tab" data-ftype="visual" onclick="switchFeatureTypeTab('visual')">Visual Features</button>
-          <button class="feature-type-tab" data-ftype="bonus" onclick="switchFeatureTypeTab('bonus')">Bonus Features</button>
+        <div class="feature-shell">
+          <div class="feature-type-tabs">
+            <button class="feature-type-tab active" data-ftype="core" onclick="switchFeatureTypeTab('core')">Core Features</button>
+            <button class="feature-type-tab" data-ftype="visual" onclick="switchFeatureTypeTab('visual')">Visual Features</button>
+          </div>
+          <div class="feature-catalog-toolbar">
+            <input type="text" id="feature-search" placeholder="Search features..." oninput="renderFeaturesCatalog()">
+            <select id="feature-state-filter" onchange="renderFeaturesCatalog()">
+              <option value="all">All states</option>
+              <option value="enabled">Enabled</option>
+              <option value="disabled">Disabled</option>
+            </select>
+          </div>
+          <div class="feature-summary" id="feature-catalog-summary"></div>
+          <div class="feature-grid" id="feature-catalog-grid"></div>
+          <div class="feature-status" id="feature-pack-status">No features enabled.</div>
         </div>
-        <div class="feature-catalog-toolbar">
-          <input type="text" id="feature-search" placeholder="Search features..." oninput="renderFeaturesCatalog()">
-          <select id="feature-state-filter" onchange="renderFeaturesCatalog()">
-            <option value="all">All states</option>
-            <option value="enabled">Enabled</option>
-            <option value="disabled">Disabled</option>
-          </select>
-        </div>
-        <div class="feature-summary" id="feature-catalog-summary"></div>
-        <div class="feature-grid" id="feature-catalog-grid"></div>
-        <div class="feature-status" id="feature-pack-status">No features enabled.</div>
       </div>
     </div>
 
@@ -1250,7 +1266,6 @@ const CORE_FEATURE_TOGGLES=[
   {id:'ft_upset_alert',name:'Upset Alert',desc:'Highlight giant-killer wins.',group:'core'},
   {id:'ft_auto_open_history',name:'Auto Open History',desc:'Jump to history after confirm.',group:'core'},
   {id:'ft_live_h2h',name:'Live H2H',desc:'Always show head-to-head panel.',group:'core'},
-  {id:'ft_quick_rematch',name:'Quick Rematch',desc:'Keep rematch button visible.',group:'core'},
   {id:'ft_daily_goal_toast',name:'Goal Toast',desc:'Toast when daily goal reached.',group:'core'},
   {id:'ft_momentum_label',name:'Momentum Label',desc:'Extra momentum label in results.',group:'core'},
   {id:'ft_match_quality',name:'Match Quality',desc:'Show quality score in preview.',group:'core'},
@@ -1261,10 +1276,10 @@ const CORE_FEATURE_TOGGLES=[
   {id:'ft_context_memory',name:'Context Memory',desc:'Autofill context from recent head-to-head games.',group:'core'},
   {id:'ft_confirm_upset',name:'Upset Guard',desc:'Ask confirmation before huge upsets are logged.',group:'core'},
   {id:'ft_undo_without_prompt',name:'Fast Undo',desc:'Skip the confirmation dialog when undoing.',group:'core'},
-  {id:'ft_smart_rematch_swap',name:'Swap Sides Rematch',desc:'Rematch keeps same players but swaps left/right slots.',group:'core'},
   {id:'ft_require_notes_if_manual_mult',name:'Notes For Multiplier',desc:'Require notes when multiplier is not 1.00x.',group:'core'},
   {id:'ft_auto_focus_notes',name:'Auto Focus Notes',desc:'After each confirmed game in a series, focus notes input.',group:'core'},
   {id:'ft_auto_select_top_rivals',name:'Auto Pick Rival',desc:'Auto-select most-played opponent when only one player is chosen.',group:'core'},
+  {id:'ft_history_oldest_first',name:'History Oldest First',desc:'Show oldest matches first instead of newest first.',group:'core'},
   {id:'ft_focus_mode',name:'Focus Mode',desc:'Reduce non-essential clutter.',group:'core'},
   {id:'ft_compact_history',name:'Compact History',desc:'Tighter history rows.',group:'core'},
   {id:'ft_colorful_badges',name:'Colorful Badges',desc:'Enhanced badge card glow.',group:'core'},
@@ -1272,33 +1287,7 @@ const CORE_FEATURE_TOGGLES=[
   {id:'ft_cinematic_mode',name:'Cinematic Mode',desc:'Larger spacing and animations.',group:'core'},
   {id:'ft_feature_party',name:'Feature Party',desc:'Big visual pop so enabled features are obvious.',group:'core'}
 ];
-function buildBonusFeatureToggles(){
-  const prefixes=[
-    ['Arcade','🎮'],['Turbo','⚡'],['Chaos','🌀'],['Zen','🧘'],['Pixel','🧩'],
-    ['Rocket','🚀'],['Neon','🌈'],['Ninja','🥷'],['Titan','🛡️'],['Mystic','🔮']
-  ];
-  const suffixes=['Boost','Blitz','Pulse','Mode','Storm','Rush','Shift','Echo','Quest','Fusion'];
-  const out=[];
-  let idx=1;
-  prefixes.forEach(([pName,pEmoji],pi)=>{
-    suffixes.forEach((sName,si)=>{
-      const id=`ft_bonus_${String(idx).padStart(3,'0')}`;
-      out.push({
-        id,
-        name:`${pEmoji} ${pName} ${sName}`,
-        desc:`Bonus feature ${idx}: ${pName.toLowerCase()} ${sName.toLowerCase()} modifier for extra fun.`,
-        group:'bonus',
-        bonusRank:idx,
-        bonusTheme:pi,
-        bonusStyle:si
-      });
-      idx++;
-    });
-  });
-  return out;
-}
-const BONUS_FEATURE_TOGGLES=buildBonusFeatureToggles();
-const FEATURE_TOGGLES=[...CORE_FEATURE_TOGGLES,...BONUS_FEATURE_TOGGLES];
+const FEATURE_TOGGLES=[...CORE_FEATURE_TOGGLES];
 const VISUAL_FEATURE_IDS=new Set(['ft_focus_mode','ft_compact_history','ft_colorful_badges','ft_bold_titles','ft_cinematic_mode','ft_feature_party','ft_hot_streak_fx']);
 const FEATURE_PREFS_KEY='rankmaster_pro_feature_prefs';
 
@@ -1308,9 +1297,9 @@ let selectedFormat='elimination', spinP1=null, spinP2=null;
 let currentSeries=1, seriesScores={p1:0,p2:0}, seriesGames=[], seriesActive=false;
 let historyFilter='all';
 let winnerActionLock=false;
-let queuedRematch=null;
 let currentSettingsPane='general';
 let currentFeatureType='core';
+let showWinProbability=false;
 
 function ensureStateDefaults(){
   if(!state.achievements)state.achievements={};
@@ -1321,7 +1310,7 @@ function ensureStateDefaults(){
   if(state.boldText===undefined)state.boldText=false;
   if(state.mobileLock===undefined)state.mobileLock=true;
   if(!state.featureFlags)state.featureFlags={};
-  const defaults={ft_quick_rematch:true,ft_live_h2h:true,ft_colorful_badges:true,ft_auto_clear_scores:true};
+  const defaults={ft_live_h2h:true,ft_colorful_badges:true,ft_auto_clear_scores:true};
   FEATURE_TOGGLES.forEach(f=>{if(state.featureFlags[f.id]===undefined)state.featureFlags[f.id]=!!defaults[f.id];});
   if(!state.dailyGoal||isNaN(state.dailyGoal))state.dailyGoal=5;
   const today=new Date().toISOString().slice(0,10);
@@ -1421,8 +1410,19 @@ function updatePrediction(){
     extra=` Match quality: ${quality}/100.`;
   }
   document.getElementById('pred-text').textContent=`${fav.name} is ${intensity} based on ratings.${extra}`;
-  box.classList.add('show');
-  updateLiveStats(p1,p2);
+  box.classList.toggle('show',!!showWinProbability);
+}
+function togglePredictionVisibility(){
+  const p1id=parseInt(document.getElementById('p1-select').value);
+  const p2id=parseInt(document.getElementById('p2-select').value);
+  if(!p1id||!p2id||p1id===p2id){
+    showToast('Select both players first.','error');
+    return;
+  }
+  showWinProbability=!showWinProbability;
+  const btn=document.getElementById('pred-toggle-btn');
+  if(btn)btn.textContent=showWinProbability?'📉 Hide Win Probability':'📈 Show Win Probability';
+  updatePrediction();
 }
 
 function updateLiveStats(p1,p2){
@@ -1463,6 +1463,13 @@ function onPlayerSelect(){
   }
   updatePlayerPreview(1,p1id);
   updatePlayerPreview(2,p2id);
+  const live=document.getElementById('live-stats');
+  if(p1id&&p2id&&p1id!==p2id){
+    const p1=state.players.find(x=>x.id===p1id),p2=state.players.find(x=>x.id===p2id);
+    if(p1&&p2)updateLiveStats(p1,p2);
+  }else if(live){
+    live.classList.remove('show');
+  }
   updatePrediction();
   updateWhoWon();
   updateSeriesDisplay();
@@ -1682,7 +1689,7 @@ function computeAndShowResult(p1,p2,winner,p1sc,p2sc,isSeries=false,seriesInfo=n
   }
   const vErr=validateWinnerScores(winner,p1sc,p2sc);
   if(vErr){showToast(vErr,'error');return;}
-  const r=offlineAlgorithm(p1,p2,p1sc,p2sc,p1lh,p2lh);
+  const r=offlineAlgorithm(p1,p2,p1sc,p2sc,p1lh,p2lh,mult);
   let titleText=' Match Result';
   if(midSeries){
     const toWin=Math.ceil(currentSeries/2);
@@ -1745,28 +1752,40 @@ function swapScores(){
   const p2el=document.getElementById('p2-score');
   const tmp=p1el.value;p1el.value=p2el.value;p2el.value=tmp;
 }
-function queueRematch(){
-  const p1=document.getElementById('p1-select')?.value;
-  const p2=document.getElementById('p2-select')?.value;
-  if(!p1||!p2){showToast('Select players first.','error');return;}
-  queuedRematch={p1,p2};
+function loadPreviousMatchSettings(){
+  const last=[...state.history].reverse().find(h=>!h.manualAdjust&&h.p1id&&h.p2id&&h.p1id!==h.p2id);
+  if(!last){showToast('No previous match found in history.','error');return;}
+  const p1el=document.getElementById('p1-select');
+  const p2el=document.getElementById('p2-select');
+  if(!p1el||!p2el)return;
+  p1el.value=String(last.p1id);
+  p2el.value=String(last.p2id);
+  onPlayerSelect();
+  const p1s=document.getElementById('p1-score');
+  const p2s=document.getElementById('p2-score');
+  if(p1s)p1s.value=(last.p1score??'')!==''?String(last.p1score):'';
+  if(p2s)p2s.value=(last.p2score??'')!==''?String(last.p2score):'';
+  const ctx=document.getElementById('match-context');
+  if(ctx)ctx.value=last.context||'';
+  const notes=document.getElementById('match-notes');
+  if(notes)notes.value=last.notes||'';
+  const mult=parseFloat(last.multiplier);
+  const multEl=document.getElementById('points-multiplier');
+  const multLabel=document.getElementById('mult-display');
+  if(multEl&&!isNaN(mult)){
+    multEl.value=String(Math.max(0.25,Math.min(5,mult)));
+    if(multLabel)multLabel.textContent=parseFloat(multEl.value).toFixed(2)+'x';
+  }
+  const p1lhEl=document.getElementById('p1-lh');
+  const p2lhEl=document.getElementById('p2-lh');
+  if(p1lhEl)p1lhEl.checked=!!last.p1lh||(last.lhTag||'').includes(`${last.p1name} (LH)`);
+  if(p2lhEl)p2lhEl.checked=!!last.p2lh||(last.lhTag||'').includes(`${last.p2name} (LH)`);
+  const sGames=parseInt(last.seriesData?.games);
+  setSeries([1,3,5,7,9].includes(sGames)?sGames:1);
   pendingChanges=null;
   awaitingSeriesConfirm=false;
   document.getElementById('result-panel').classList.remove('show');
-  document.getElementById('p1-score').value='';
-  document.getElementById('p2-score').value='';
-  showToast('Rematch queued. Enter next scores. ♻️','success');
-}
-function applyQueuedRematch(){
-  if(!queuedRematch)return;
-  const p1=document.getElementById('p1-select');
-  const p2=document.getElementById('p2-select');
-  if(p1&&p2){
-    if(state.featureFlags?.ft_smart_rematch_swap){p1.value=queuedRematch.p2;p2.value=queuedRematch.p1;}
-    else{p1.value=queuedRematch.p1;p2.value=queuedRematch.p2;}
-  }
-  onPlayerSelect();
-  queuedRematch=null;
+  showToast('Loaded previous match settings from history.','success');
 }
 function undoLastMatch(){
   const last=state.history[state.history.length-1];
@@ -1798,6 +1817,7 @@ function applyChanges(opts){
   p1.rating+=p1delta;p2.rating+=p2delta;
   const p1sc=document.getElementById('p1-score')?.value??'';
   const p2sc=document.getElementById('p2-score')?.value??'';
+  const usedMult=parseFloat(document.getElementById('points-multiplier')?.value||'1');
   const p1WonNow=(parseScore(p1sc)!==null&&parseScore(p2sc)!==null)?(parseScore(p1sc)>parseScore(p2sc)):(p1delta>p2delta);
   if(p1WonNow){p1.wins=(p1.wins||0)+1;p2.losses=(p2.losses||0)+1;}
   else{p2.wins=(p2.wins||0)+1;p1.losses=(p1.losses||0)+1;}
@@ -1808,7 +1828,7 @@ function applyChanges(opts){
     p1id:p1.id,p2id:p2.id,p1name:p1.name,p2name:p2.name,
     p1delta,p2delta,p1ratBefore:oldR1,p2ratBefore:oldR2,
     p1score:p1sc,p2score:p2sc,
-    reasoning,context,notes,mode:'offline',lhTag,
+    reasoning,context,notes,mode:'offline',lhTag,multiplier:usedMult,p1lh:!!p1lh,p2lh:!!p2lh,
     tournamentMatch:!!tournamentMatch,
     seriesData:seriesData||null
   });
@@ -1846,6 +1866,9 @@ function applyChanges(opts){
       document.getElementById('result-panel').classList.remove('show');
       document.getElementById('prediction-box').classList.remove('show');
       document.getElementById('live-stats').classList.remove('show');
+      showWinProbability=false;
+      const predBtn=document.getElementById('pred-toggle-btn');
+      if(predBtn)predBtn.textContent='📈 Show Win Probability';
       const clearIds=['p1-select','p2-select','match-notes'];
       if(state.featureFlags?.ft_auto_clear_scores!==false)clearIds.push('p1-score','p2-score');
       if(!state.featureFlags?.ft_keep_context_after_confirm)clearIds.push('match-context');
@@ -2116,7 +2139,6 @@ function init(){
   setMatchPointsInput();
   setAppearanceInputs();
   updateDailyGoalStatus();
-  renderFeatureGrid();
   renderAll();
 }
 
@@ -2150,7 +2172,7 @@ function loadFeaturePrefs(){
       if(prefs.featureFlags&&typeof prefs.featureFlags==='object'){
         state.featureFlags={...(state.featureFlags||{}),...prefs.featureFlags};
       }
-      if(typeof prefs.currentFeatureType==='string'&&['core','visual','bonus'].includes(prefs.currentFeatureType))currentFeatureType=prefs.currentFeatureType;
+      if(typeof prefs.currentFeatureType==='string'&&['core','visual'].includes(prefs.currentFeatureType))currentFeatureType=prefs.currentFeatureType;
     }
   }catch(e){}
 }
@@ -2166,7 +2188,6 @@ function renderAll(){
   setMatchPointsInput();
   setAppearanceInputs();
   updateDailyGoalStatus();
-  renderFeatureGrid();
   renderAppearanceFeatureGrid();
   applyFeatureEffects();
   if(document.getElementById('tab-tournament').style.display!=='none')renderTournamentTab();
@@ -2175,39 +2196,14 @@ function renderAll(){
   saveState();
 }
 function applyFeatureEffects(){
-  const rematch=document.getElementById('rematch-btn');
-  if(rematch)rematch.style.display=state.featureFlags?.ft_quick_rematch===false?'none':'inline-flex';
-  const live=document.getElementById('live-stats');
-  if(live&&state.featureFlags?.ft_live_h2h&&!live.classList.contains('show'))live.classList.add('show');
   document.body.classList.toggle('focus-mode',!!state.featureFlags?.ft_focus_mode);
   document.body.classList.toggle('compact-history',!!state.featureFlags?.ft_compact_history);
   document.body.classList.toggle('colorful-badges',!!state.featureFlags?.ft_colorful_badges);
   document.body.classList.toggle('bold-titles',!!state.featureFlags?.ft_bold_titles);
   document.body.classList.toggle('hot-streak-fx',!!state.featureFlags?.ft_hot_streak_fx);
   document.body.classList.toggle('feature-party',!!state.featureFlags?.ft_feature_party);
-  const activeBonus=BONUS_FEATURE_TOGGLES.filter(f=>!!state.featureFlags?.[f.id]);
-  const bonusOn=activeBonus.length;
-  document.body.classList.toggle('bonus-fx',bonusOn>0);
-  let hueSum=0,depthSum=0,radiusSum=0,borderSum=0;
-  activeBonus.forEach(f=>{
-    hueSum+=(f.bonusTheme-4.5)*1.8;
-    depthSum+=(f.bonusStyle%4===0)?1.2:0.5;
-    radiusSum+=(f.bonusStyle===7||f.bonusStyle===3)?0.18:0.08;
-    borderSum+=(f.bonusStyle===1||f.bonusStyle===5)?0.035:0.015;
-  });
-  const hue=Math.max(-28,Math.min(28,hueSum));
-  const depth=Math.min(20,depthSum);
-  const radius=12+Math.min(8,radiusSum);
-  const border=1+Math.min(1.8,borderSum);
-  const sat=(1+Math.min(0.42,bonusOn/180)).toFixed(2);
-  document.documentElement.style.setProperty('--bonus-glow',String(Math.min(0.38,bonusOn/180)));
-  document.documentElement.style.setProperty('--bonus-hue-shift',`${hue}deg`);
-  document.documentElement.style.setProperty('--bonus-depth',`${depth}px`);
-  document.documentElement.style.setProperty('--bonus-radius',`${radius.toFixed(1)}px`);
-  document.documentElement.style.setProperty('--bonus-border',`${border.toFixed(2)}px`);
-  document.documentElement.style.setProperty('--bonus-sat',String(sat));
   const app=document.querySelector('.app');
-  if(app)app.style.maxWidth=state.featureFlags?.ft_cinematic_mode?'1180px':'1100px';
+  if(app)app.style.maxWidth=state.featureFlags?.ft_cinematic_mode?'1240px':'1160px';
 }
 
 function applyAppearance(){
@@ -2287,31 +2283,15 @@ function getFeatureCollection(typeFilter='core',stateFilter='all',query=''){
     if(stateFilter==='disabled'&&state.featureFlags?.[f.id])return false;
     if(typeFilter==='core'&&(f.group!=='core'||VISUAL_FEATURE_IDS.has(f.id)))return false;
     if(typeFilter==='visual'&&!VISUAL_FEATURE_IDS.has(f.id))return false;
-    if(typeFilter==='bonus'&&f.group!=='bonus')return false;
     if(!q)return true;
     return f.name.toLowerCase().includes(q)||f.desc.toLowerCase().includes(q)||f.id.includes(q);
   });
 }
 function switchFeatureTypeTab(type){
-  currentFeatureType=['core','visual','bonus'].includes(type)?type:'core';
+  currentFeatureType=['core','visual'].includes(type)?type:'core';
   document.querySelectorAll('.feature-type-tab').forEach(b=>b.classList.toggle('active',b.dataset.ftype===currentFeatureType));
   saveFeaturePrefs();
   renderFeaturesCatalog();
-}
-function renderFeatureGrid(){
-  const wrap=document.getElementById('feature-grid');
-  if(!wrap)return;
-  const realCore=CORE_FEATURE_TOGGLES.filter(f=>!VISUAL_FEATURE_IDS.has(f.id));
-  wrap.innerHTML=realCore.map(f=>`<label class="feature-item ${state.featureFlags?.[f.id]?'active':''}">
-    <input type="checkbox" ${state.featureFlags?.[f.id]?'checked':''} onchange="setFeatureFlag('${f.id}',this.checked)">
-    <div><div class="fi-title">${state.featureFlags?.[f.id]?'✅':'⬜'} ${f.name}</div><div class="fi-desc">${f.desc}</div></div>
-  </label>`).join('');
-  const on=FEATURE_TOGGLES.filter(f=>!!state.featureFlags?.[f.id]).map(f=>f.name);
-  const box=document.getElementById('feature-pack-status');
-  if(box){
-    box.textContent=on.length?`🚀 ${on.length} features enabled: ${on.slice(0,4).join(', ')}${on.length>4?'...':''}`:'No features enabled.';
-    box.style.color=on.length?'var(--green)':'var(--muted)';
-  }
 }
 function renderAppearanceFeatureGrid(){
   const wrap=document.getElementById('appearance-feature-grid');
@@ -2330,20 +2310,25 @@ function renderFeaturesCatalog(){
   const filter=filterEl?filterEl.value:'all';
   const query=searchEl?searchEl.value:'';
   document.querySelectorAll('.feature-type-tab').forEach(b=>b.classList.toggle('active',b.dataset.ftype===(currentFeatureType||'core')));
-  const items=getFeatureCollection(currentFeatureType||'core',filter,query);
+  const items=getFeatureCollection(currentFeatureType||'core',filter,query).sort((a,b)=>a.name.localeCompare(b.name));
   wrap.innerHTML=items.map(f=>`<label class="feature-item ${state.featureFlags?.[f.id]?'active':''}">
     <input type="checkbox" ${state.featureFlags?.[f.id]?'checked':''} onchange="setFeatureFlag('${f.id}',this.checked)">
     <div>
       <div class="fi-title">${state.featureFlags?.[f.id]?'✅':'⬜'} ${f.name}</div>
       <div class="fi-desc">${f.desc}</div>
-      <small>${VISUAL_FEATURE_IDS.has(f.id)?'Visual':(f.group==='bonus'?'Bonus':'Core')} • ${f.id}</small>
+      <small>${VISUAL_FEATURE_IDS.has(f.id)?'Visual':'Core'} • ${f.id}</small>
     </div>
   </label>`).join('');
   const enabledCount=FEATURE_TOGGLES.filter(f=>state.featureFlags?.[f.id]).length;
   const enabledReal=CORE_FEATURE_TOGGLES.filter(f=>!VISUAL_FEATURE_IDS.has(f.id)&&state.featureFlags?.[f.id]).length;
   const summary=document.getElementById('feature-catalog-summary');
   if(summary){
-    summary.textContent=`Showing ${items.length} of ${FEATURE_TOGGLES.length} features • Enabled: ${enabledCount} • Real core enabled: ${enabledReal} • Bonus: ${BONUS_FEATURE_TOGGLES.length}`;
+    summary.textContent=`Showing ${items.length} of ${FEATURE_TOGGLES.length} features • Enabled: ${enabledCount} • Core enabled: ${enabledReal}`;
+  }
+  const status=document.getElementById('feature-pack-status');
+  if(status){
+    status.textContent=enabledCount?`Enabled features: ${enabledCount}`:'No features enabled.';
+    status.style.color=enabledCount?'var(--green)':'var(--muted)';
   }
 }
 function featurePackAll(on){
@@ -2355,12 +2340,11 @@ function featurePackAll(on){
 function featurePackPresetFun(){
   const funSet=new Set([
     'ft_hot_streak_fx','ft_confetti','ft_rival_alert','ft_upset_alert',
-    'ft_live_h2h','ft_quick_rematch','ft_daily_goal_toast',
+    'ft_live_h2h','ft_daily_goal_toast',
     'ft_momentum_label','ft_match_quality','ft_colorful_badges','ft_bold_titles',
     'ft_auto_open_history','ft_feature_party','ft_emoji_hype','ft_cinematic_mode'
   ]);
   FEATURE_TOGGLES.forEach(f=>{state.featureFlags[f.id]=funSet.has(f.id);});
-  BONUS_FEATURE_TOGGLES.slice(0,12).forEach(f=>{state.featureFlags[f.id]=true;});
   saveFeaturePrefs();
   renderAll();
   showToast('Feature Pack: fun preset applied. 🎮','success');
@@ -2565,7 +2549,6 @@ function renderMatchSelects(){
       state.players.map(p=>`<option value="${p.id}">${p.name}  ${p.rating} pts (${p.wins||0}W ${p.losses||0}L)</option>`).join('');
     if(cur)sel.value=cur;
   });
-  applyQueuedRematch();
   onPlayerSelect();
 }
 
@@ -2587,7 +2570,8 @@ function renderHistory(){
   else if(historyFilter==='manual')items=items.filter(h=>h.manualAdjust);
   if(search)items=items.filter(h=>h.p1name.toLowerCase().includes(search)||h.p2name.toLowerCase().includes(search));
   if(!items.length){list.innerHTML='<div class="empty-state"><div class="icon"></div><p>No matches found.</p></div>';return;}
-  list.innerHTML=[...items].reverse().map(h=>`
+  const ordered=state.featureFlags?.ft_history_oldest_first?[...items]:[...items].reverse();
+  list.innerHTML=ordered.map(h=>`
     <div class="history-item">
       <div class="timestamp">${h.time}</div>
       <div class="match-desc">
