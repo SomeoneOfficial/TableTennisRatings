@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" id="viewport-meta" content="width=device-width, initial-scale=1.0">
 <title>RankMaster Pro</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -36,6 +36,8 @@ body{
     radial-gradient(ellipse at 50% 50%,rgba(90,60,180,.06) 0%,transparent 70%);
   overflow-x:hidden;
 }
+body.mobile-lock{overflow-x:hidden;touch-action:pan-y;}
+body.mobile-lock .app{max-width:100vw;}
 body.bold-text,.bold-text *{font-weight:700 !important;}
 h1,h2,h3,h4{font-family:'Bebas Neue',sans-serif;letter-spacing:.04em;}
 
@@ -46,6 +48,10 @@ h1,h2,h3,h4{font-family:'Bebas Neue',sans-serif;letter-spacing:.04em;}
 
 /* APP */
 .app{max-width:1100px;margin:0 auto;padding:20px 14px;}
+@media(max-width:700px){
+  .app{padding:12px 10px;}
+  .card-lg,.card,.settings-section{padding:14px;}
+}
 .app.compact .card-lg{padding:16px;}
 .app.compact .player-card{padding:10px 14px;}
 .app.compact .settings-section{padding:14px;}
@@ -503,7 +509,7 @@ select:focus{outline:none;border-color:var(--accent);}
 
 /* MATCH CONTEXT ROW */
 .context-row{
-  display:grid;grid-template-columns:1fr auto auto;
+  display:grid;grid-template-columns:1fr auto;
   gap:10px;align-items:end;margin-bottom:12px;
 }
 @media(max-width:580px){.context-row{grid-template-columns:1fr 1fr;}}
@@ -543,6 +549,14 @@ select:focus{outline:none;border-color:var(--accent);}
 .feature-summary{
   font-size:.8rem;color:var(--muted);margin-bottom:10px;
 }
+.feature-type-tabs{
+  display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;
+}
+.feature-type-tab{
+  border:1px solid var(--border);background:var(--surface2);color:var(--muted);
+  border-radius:8px;padding:7px 10px;font-size:.78rem;font-weight:700;cursor:pointer;
+}
+.feature-type-tab.active{border-color:var(--accent);color:var(--accent);background:rgba(240,192,64,.1);}
 .feature-item small{
   display:block;color:var(--muted);font-size:.68rem;margin-top:3px;
 }
@@ -671,6 +685,10 @@ body.bonus-fx .card,body.bonus-fx .card-lg{box-shadow:0 0 0 1px rgba(90,180,240,
 <div id="tab-match" class="tab-content" style="display:none">
   <div class="card-lg">
     <h2 class="card-title">⚔️ Log a Match</h2>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin:-6px 0 14px;">
+      <button class="btn btn-secondary btn-sm" onclick="openSpinner()">🎲 Spin Matchup</button>
+      <button class="btn btn-secondary btn-sm" onclick="swapScores()">🔁 Swap Scores</button>
+    </div>
 
     <!-- Best-of series -->
     <div style="margin-bottom:14px">
@@ -779,38 +797,10 @@ body.bonus-fx .card,body.bonus-fx .card-lg{box-shadow:0 0 0 1px rgba(90,180,240,
             <span id="mult-display" style="font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:var(--accent);min-width:44px;text-align:right;">1.00x</span>
           </div>
         </div>
-        <div>
-          <div style="font-size:.72rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px">🎰 Random</div>
-          <button class="btn btn-secondary btn-sm" onclick="openSpinner()">🎲 Spin!</button>
-        </div>
       </div>
       <div>
         <div style="font-size:.72rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px">📝 Match Notes</div>
         <input type="text" id="match-notes" placeholder="e.g. Epic comeback, last point thriller" class="notes-input" style="margin-top:0">
-      </div>
-      <div class="match-tools">
-        <div class="tool-card">
-          <div class="tool-title">⚡ Quick Score Tools</div>
-          <div class="score-preset-grid" id="score-preset-grid">
-            <button class="chip-btn" onclick="setScorePreset(10,8)">10-8</button>
-            <button class="chip-btn" onclick="setScorePreset(10,6)">10-6</button>
-            <button class="chip-btn" onclick="setScorePreset(10,2)">10-2</button>
-            <button class="chip-btn" onclick="setScorePreset(12,10)">12-10</button>
-            <button class="chip-btn" onclick="randomizeScores()">🎲 Random</button>
-            <button class="chip-btn" onclick="swapScores()">🔁 Swap</button>
-          </div>
-        </div>
-        <div class="tool-card">
-          <div class="tool-title">🎉 Fun Game Modes</div>
-          <div class="score-preset-grid">
-            <button class="chip-btn" onclick="applyFunMode('clutch')">🔥 Clutch</button>
-            <button class="chip-btn" onclick="applyFunMode('chaos')">🌀 Chaos</button>
-            <button class="chip-btn" onclick="applyFunMode('speed')">⚡ Speedrun</button>
-            <button class="chip-btn" onclick="applyFunMode('marathon')">🏁 Marathon</button>
-            <button class="chip-btn" onclick="applyFunMode('mirror')">🪞 Mirror</button>
-            <button class="chip-btn" onclick="applyFunMode('underdog')">🐉 Underdog</button>
-          </div>
-        </div>
       </div>
     </div>
 
@@ -859,7 +849,6 @@ body.bonus-fx .card,body.bonus-fx .card-lg{box-shadow:0 0 0 1px rgba(90,180,240,
       <input type="text" id="history-search" placeholder="Search player" 
         style="background:var(--surface);border:1px solid var(--border);border-radius:7px;color:var(--text);padding:7px 12px;font-family:'DM Sans',sans-serif;font-size:.84rem;width:160px;"
         oninput="renderHistory()">
-      <button class="btn btn-secondary btn-sm" id="history-undo-btn" onclick="undoLastMatch()">↩️ Undo Last</button>
     </div>
   </div>
   <div class="history-list" id="history-list"></div>
@@ -922,6 +911,14 @@ body.bonus-fx .card,body.bonus-fx .card-lg{box-shadow:0 0 0 1px rgba(90,180,240,
             <div id="daily-goal-status" style="font-size:.75rem;color:var(--muted);margin-top:6px;">0 / 5 today</div>
           </div>
           <div class="settings-action">
+            <div class="sa-title">📱 Mobile Lock</div>
+            <div class="sa-desc">Keep page in frame on phones (no sideways move / pinch zoom).</div>
+            <label style="display:flex;align-items:center;gap:8px;font-size:.82rem;">
+              <input type="checkbox" id="mobile-lock-toggle" onchange="setMobileLock(this.checked)">
+              Enable mobile lock
+            </label>
+          </div>
+          <div class="settings-action">
             <div class="sa-title">Reset All Ratings</div>
             <div class="sa-desc">Reset every player to 1000.</div>
             <button class="btn btn-danger btn-sm" onclick="resetAllRatings()">Reset</button>
@@ -956,14 +953,17 @@ body.bonus-fx .card,body.bonus-fx .card-lg{box-shadow:0 0 0 1px rgba(90,180,240,
         </div>
         <div style="font-size:.75rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;">Quick Core Toggles</div>
         <div class="feature-grid" id="feature-grid" style="margin-bottom:10px;"></div>
+        <div class="feature-type-tabs">
+          <button class="feature-type-tab active" data-ftype="core" onclick="switchFeatureTypeTab('core')">Core Features</button>
+          <button class="feature-type-tab" data-ftype="visual" onclick="switchFeatureTypeTab('visual')">Visual Features</button>
+          <button class="feature-type-tab" data-ftype="bonus" onclick="switchFeatureTypeTab('bonus')">Bonus Features</button>
+        </div>
         <div class="feature-catalog-toolbar">
           <input type="text" id="feature-search" placeholder="Search features..." oninput="renderFeaturesCatalog()">
-          <select id="feature-filter" onchange="renderFeaturesCatalog()">
-            <option value="all">All</option>
+          <select id="feature-state-filter" onchange="renderFeaturesCatalog()">
+            <option value="all">All states</option>
             <option value="enabled">Enabled</option>
             <option value="disabled">Disabled</option>
-            <option value="core">Core</option>
-            <option value="bonus">Bonus (100)</option>
           </select>
         </div>
         <div class="feature-summary" id="feature-catalog-summary"></div>
@@ -1236,7 +1236,6 @@ const CORE_FEATURE_TOGGLES=[
   {id:'ft_auto_open_history',name:'Auto Open History',desc:'Jump to history after confirm.',group:'core'},
   {id:'ft_live_h2h',name:'Live H2H',desc:'Always show head-to-head panel.',group:'core'},
   {id:'ft_quick_rematch',name:'Quick Rematch',desc:'Keep rematch button visible.',group:'core'},
-  {id:'ft_quick_undo',name:'Quick Undo',desc:'Allow undo in history tab.',group:'core'},
   {id:'ft_daily_goal_toast',name:'Goal Toast',desc:'Toast when daily goal reached.',group:'core'},
   {id:'ft_momentum_label',name:'Momentum Label',desc:'Extra momentum label in results.',group:'core'},
   {id:'ft_match_quality',name:'Match Quality',desc:'Show quality score in preview.',group:'core'},
@@ -1286,8 +1285,9 @@ function buildBonusFeatureToggles(){
 const BONUS_FEATURE_TOGGLES=buildBonusFeatureToggles();
 const FEATURE_TOGGLES=[...CORE_FEATURE_TOGGLES,...BONUS_FEATURE_TOGGLES];
 const VISUAL_FEATURE_IDS=new Set(['ft_focus_mode','ft_compact_history','ft_colorful_badges','ft_bold_titles','ft_cinematic_mode','ft_feature_party','ft_hot_streak_fx']);
+const FEATURE_PREFS_KEY='rankmaster_pro_feature_prefs';
 
-let state={players:[],history:[],nextId:1,tournament:null,achievements:{},lowestRatings:{},matchPoints:10,theme:'neon',density:'comfort',dailyGoal:5,dailyDate:'',dailyCount:0,boldText:false,featureFlags:{}};
+let state={players:[],history:[],nextId:1,tournament:null,achievements:{},lowestRatings:{},matchPoints:10,theme:'neon',density:'comfort',dailyGoal:5,dailyDate:'',dailyCount:0,boldText:false,mobileLock:true,featureFlags:{}};
 let selectedColor=COLORS[0], editSelectedColor=COLORS[0], editingId=null, pendingChanges=null;
 let selectedFormat='elimination', spinP1=null, spinP2=null;
 let currentSeries=1, seriesScores={p1:0,p2:0}, seriesGames=[], seriesActive=false;
@@ -1295,6 +1295,7 @@ let historyFilter='all';
 let winnerActionLock=false;
 let queuedRematch=null;
 let currentSettingsPane='general';
+let currentFeatureType='core';
 
 function ensureStateDefaults(){
   if(!state.achievements)state.achievements={};
@@ -1303,6 +1304,7 @@ function ensureStateDefaults(){
   if(!state.theme)state.theme='neon';
   if(!state.density)state.density='comfort';
   if(state.boldText===undefined)state.boldText=false;
+  if(state.mobileLock===undefined)state.mobileLock=true;
   if(!state.featureFlags)state.featureFlags={};
   const defaults={ft_quick_rematch:true,ft_live_h2h:true,ft_colorful_badges:true,ft_auto_clear_scores:true};
   FEATURE_TOGGLES.forEach(f=>{if(state.featureFlags[f.id]===undefined)state.featureFlags[f.id]=!!defaults[f.id];});
@@ -1701,52 +1703,10 @@ function computeAndShowResult(p1,p2,winner,p1sc,p2sc,isSeries=false,seriesInfo=n
   document.getElementById('result-panel').scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 
-function setScorePreset(win,lose){
-  const p1el=document.getElementById('p1-score');
-  const p2el=document.getElementById('p2-score');
-  const p1cur=parseInt(p1el?.value||'0'),p2cur=parseInt(p2el?.value||'0');
-  if(p1cur<p2cur){p1el.value=lose;p2el.value=win;}else{p1el.value=win;p2el.value=lose;}
-}
-function renderQuickScorePresets(){
-  const grid=document.getElementById('score-preset-grid');
-  if(!grid)return;
-  const max=getRequiredMatchPoints();
-  const near=Math.max(0,max-1);
-  const mid=Math.max(0,max-3);
-  const low=Math.max(0,max-7);
-  const deuce=max+2;
-  grid.innerHTML=`
-    <button class="chip-btn" onclick="setScorePreset(${max},${near})">${max}-${near}</button>
-    <button class="chip-btn" onclick="setScorePreset(${max},${mid})">${max}-${mid}</button>
-    <button class="chip-btn" onclick="setScorePreset(${max},${low})">${max}-${low}</button>
-    <button class="chip-btn" onclick="setScorePreset(${deuce},${max})">${deuce}-${max}</button>
-    <button class="chip-btn" onclick="randomizeScores()">🎲 Random</button>
-    <button class="chip-btn" onclick="swapScores()">🔁 Swap</button>
-  `;
-}
-function randomizeScores(){
-  const max=getRequiredMatchPoints();
-  const loser=Math.floor(Math.random()*(max-1));
-  const winner=max+Math.floor(Math.random()*3);
-  setScorePreset(winner,loser);
-}
 function swapScores(){
   const p1el=document.getElementById('p1-score');
   const p2el=document.getElementById('p2-score');
   const tmp=p1el.value;p1el.value=p2el.value;p2el.value=tmp;
-}
-function applyFunMode(mode){
-  const ctx=document.getElementById('match-context');
-  const mult=document.getElementById('points-multiplier');
-  if(!ctx||!mult)return;
-  if(mode==='clutch'){ctx.value='🔥 Clutch Mode';mult.value='1.50';randomizeScores();}
-  else if(mode==='chaos'){ctx.value='🌀 Chaos Mode';mult.value=(0.75+Math.random()*2.25).toFixed(2);randomizeScores();}
-  else if(mode==='speed'){ctx.value='⚡ Speedrun Rally';mult.value='0.75';setScorePreset(getRequiredMatchPoints(),Math.max(0,getRequiredMatchPoints()-2));}
-  else if(mode==='marathon'){ctx.value='🏁 Marathon Duel';mult.value='2.00';setScorePreset(getRequiredMatchPoints()+4,getRequiredMatchPoints()+2);}
-  else if(mode==='mirror'){ctx.value='🪞 Mirror Match';mult.value='1.00';setScorePreset(getRequiredMatchPoints(),getRequiredMatchPoints()-1);}
-  else if(mode==='underdog'){ctx.value='🐉 Underdog Challenge';mult.value='2.50';randomizeScores();}
-  document.getElementById('mult-display').textContent=parseFloat(mult.value).toFixed(2)+'x';
-  showToast('Fun mode applied! 🎮','success');
 }
 function queueRematch(){
   const p1=document.getElementById('p1-select')?.value;
@@ -2109,6 +2069,7 @@ function drawRatingGraph(playerId,canvasId){
 // ===================== INIT =====================
 function init(){
   try{const s=localStorage.getItem('rankmaster_pro_state');if(s){const p=JSON.parse(s);if(p?.players){state=p;}}}catch(e){}
+  loadFeaturePrefs();
   ensureStateDefaults();
   applyAppearance();
   renderColorSwatches('color-swatches',c=>{selectedColor=c;});
@@ -2135,14 +2096,32 @@ function renderColorSwatches(cid,onSelect,isEdit=false){
   cw.appendChild(ci);w.appendChild(cw);
 }
 
-function saveState(){try{localStorage.setItem('rankmaster_pro_state',JSON.stringify(state));}catch(e){}}
+function saveFeaturePrefs(){
+  try{
+    const prefs={featureFlags:state.featureFlags||{},currentFeatureType:currentFeatureType||'core'};
+    localStorage.setItem(FEATURE_PREFS_KEY,JSON.stringify(prefs));
+  }catch(e){}
+}
+function loadFeaturePrefs(){
+  try{
+    const raw=localStorage.getItem(FEATURE_PREFS_KEY);
+    if(!raw)return;
+    const prefs=JSON.parse(raw);
+    if(prefs&&typeof prefs==='object'){
+      if(prefs.featureFlags&&typeof prefs.featureFlags==='object'){
+        state.featureFlags={...(state.featureFlags||{}),...prefs.featureFlags};
+      }
+      if(typeof prefs.currentFeatureType==='string'&&['core','visual','bonus'].includes(prefs.currentFeatureType))currentFeatureType=prefs.currentFeatureType;
+    }
+  }catch(e){}
+}
+function saveState(){try{localStorage.setItem('rankmaster_pro_state',JSON.stringify(state));saveFeaturePrefs();}catch(e){}}
 
 function renderAll(){
   ensureStateDefaults();
   applyAppearance();
   renderLeaderboard();
   renderMatchSelects();
-  renderQuickScorePresets();
   renderHistory();
   renderPlayersManageList();
   setMatchPointsInput();
@@ -2161,8 +2140,6 @@ function applyFeatureEffects(){
   if(rematch)rematch.style.display=state.featureFlags?.ft_quick_rematch===false?'none':'inline-flex';
   const live=document.getElementById('live-stats');
   if(live&&state.featureFlags?.ft_live_h2h&&!live.classList.contains('show'))live.classList.add('show');
-  const undoBtn=document.getElementById('history-undo-btn');
-  if(undoBtn)undoBtn.style.display=state.featureFlags?.ft_quick_undo?'inline-flex':'none';
   document.body.classList.toggle('focus-mode',!!state.featureFlags?.ft_focus_mode);
   document.body.classList.toggle('compact-history',!!state.featureFlags?.ft_compact_history);
   document.body.classList.toggle('colorful-badges',!!state.featureFlags?.ft_colorful_badges);
@@ -2180,9 +2157,17 @@ function applyAppearance(){
   document.body.classList.remove('theme-neon','theme-sunset','theme-arena');
   document.body.classList.add(`theme-${state.theme||'neon'}`);
   document.body.classList.toggle('bold-text',!!state.boldText);
+  applyMobileLock();
   const app=document.querySelector('.app');
   if(app){
     app.classList.toggle('compact',state.density==='compact');
+  }
+}
+function applyMobileLock(){
+  document.body.classList.toggle('mobile-lock',!!state.mobileLock);
+  const vm=document.getElementById('viewport-meta');
+  if(vm){
+    vm.setAttribute('content',state.mobileLock?'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no':'width=device-width, initial-scale=1.0');
   }
 }
 function setAppearanceInputs(){
@@ -2190,10 +2175,12 @@ function setAppearanceInputs(){
   const d=document.getElementById('density-select');
   const g=document.getElementById('daily-goal-input');
   const b=document.getElementById('bold-text-toggle');
+  const ml=document.getElementById('mobile-lock-toggle');
   if(t)t.value=state.theme||'neon';
   if(d)d.value=state.density||'comfort';
   if(g)g.value=state.dailyGoal||5;
   if(b)b.checked=!!state.boldText;
+  if(ml)ml.checked=!!state.mobileLock;
 }
 function setTheme(v){
   state.theme=v||'neon';
@@ -2230,17 +2217,29 @@ function setBoldText(v){
   applyAppearance();
   saveState();
 }
-function getFeatureCollection(filter='all',query=''){
+function setMobileLock(v){
+  state.mobileLock=!!v;
+  applyMobileLock();
+  saveState();
+  showToast(state.mobileLock?'Mobile lock enabled.':'Mobile lock disabled.','success');
+}
+function getFeatureCollection(typeFilter='core',stateFilter='all',query=''){
   const q=(query||'').trim().toLowerCase();
   return FEATURE_TOGGLES.filter(f=>{
-    if(filter==='enabled'&&!state.featureFlags?.[f.id])return false;
-    if(filter==='disabled'&&state.featureFlags?.[f.id])return false;
-    if(filter==='core'&&(f.group!=='core'||VISUAL_FEATURE_IDS.has(f.id)))return false;
-    if(filter==='visual'&&!VISUAL_FEATURE_IDS.has(f.id))return false;
-    if(filter==='bonus'&&f.group!=='bonus')return false;
+    if(stateFilter==='enabled'&&!state.featureFlags?.[f.id])return false;
+    if(stateFilter==='disabled'&&state.featureFlags?.[f.id])return false;
+    if(typeFilter==='core'&&(f.group!=='core'||VISUAL_FEATURE_IDS.has(f.id)))return false;
+    if(typeFilter==='visual'&&!VISUAL_FEATURE_IDS.has(f.id))return false;
+    if(typeFilter==='bonus'&&f.group!=='bonus')return false;
     if(!q)return true;
     return f.name.toLowerCase().includes(q)||f.desc.toLowerCase().includes(q)||f.id.includes(q);
   });
+}
+function switchFeatureTypeTab(type){
+  currentFeatureType=['core','visual','bonus'].includes(type)?type:'core';
+  document.querySelectorAll('.feature-type-tab').forEach(b=>b.classList.toggle('active',b.dataset.ftype===currentFeatureType));
+  saveFeaturePrefs();
+  renderFeaturesCatalog();
 }
 function renderFeatureGrid(){
   const wrap=document.getElementById('feature-grid');
@@ -2269,17 +2268,18 @@ function renderAppearanceFeatureGrid(){
 function renderFeaturesCatalog(){
   const wrap=document.getElementById('feature-catalog-grid');
   if(!wrap)return;
-  const filterEl=document.getElementById('feature-filter');
+  const filterEl=document.getElementById('feature-state-filter');
   const searchEl=document.getElementById('feature-search');
   const filter=filterEl?filterEl.value:'all';
   const query=searchEl?searchEl.value:'';
-  const items=getFeatureCollection(filter,query);
+  document.querySelectorAll('.feature-type-tab').forEach(b=>b.classList.toggle('active',b.dataset.ftype===(currentFeatureType||'core')));
+  const items=getFeatureCollection(currentFeatureType||'core',filter,query);
   wrap.innerHTML=items.map(f=>`<label class="feature-item ${state.featureFlags?.[f.id]?'active':''}">
     <input type="checkbox" ${state.featureFlags?.[f.id]?'checked':''} onchange="setFeatureFlag('${f.id}',this.checked)">
     <div>
       <div class="fi-title">${state.featureFlags?.[f.id]?'✅':'⬜'} ${f.name}</div>
       <div class="fi-desc">${f.desc}</div>
-      <small>${f.group==='bonus'?'Bonus':'Core'} • ${f.id}</small>
+      <small>${VISUAL_FEATURE_IDS.has(f.id)?'Visual':(f.group==='bonus'?'Bonus':'Core')} • ${f.id}</small>
     </div>
   </label>`).join('');
   const enabledCount=FEATURE_TOGGLES.filter(f=>state.featureFlags?.[f.id]).length;
@@ -2291,23 +2291,26 @@ function renderFeaturesCatalog(){
 }
 function featurePackAll(on){
   FEATURE_TOGGLES.forEach(f=>{state.featureFlags[f.id]=!!on;});
+  saveFeaturePrefs();
   renderAll();
   showToast(on?'Feature Pack: all enabled.':'Feature Pack: all disabled.','success');
 }
 function featurePackPresetFun(){
   const funSet=new Set([
     'ft_hot_streak_fx','ft_confetti','ft_rival_alert','ft_upset_alert',
-    'ft_live_h2h','ft_quick_rematch','ft_quick_undo','ft_daily_goal_toast',
+    'ft_live_h2h','ft_quick_rematch','ft_daily_goal_toast',
     'ft_momentum_label','ft_match_quality','ft_colorful_badges','ft_bold_titles',
     'ft_auto_open_history','ft_feature_party','ft_emoji_hype','ft_cinematic_mode'
   ]);
   FEATURE_TOGGLES.forEach(f=>{state.featureFlags[f.id]=funSet.has(f.id);});
   BONUS_FEATURE_TOGGLES.slice(0,12).forEach(f=>{state.featureFlags[f.id]=true;});
+  saveFeaturePrefs();
   renderAll();
   showToast('Feature Pack: fun preset applied. 🎮','success');
 }
 function setFeatureFlag(id,val){
   state.featureFlags[id]=!!val;
+  saveFeaturePrefs();
   renderAll();
   const f=FEATURE_TOGGLES.find(x=>x.id===id);
   if(f)showToast(`${val?'Enabled':'Disabled'}: ${f.name} ${val?'✅':'⭕'}`,'');
@@ -2378,6 +2381,7 @@ function normalizeImportedState(raw){
   if(typeof out.dailyDate!=='string')out.dailyDate='';
   if(typeof out.dailyCount!=='number')out.dailyCount=0;
   if(typeof out.boldText!=='boolean')out.boldText=false;
+  if(typeof out.mobileLock!=='boolean')out.mobileLock=true;
   if(!out.featureFlags)out.featureFlags={};
   FEATURE_TOGGLES.forEach(f=>{if(out.featureFlags[f.id]===undefined)out.featureFlags[f.id]=false;});
   return out;
@@ -2707,7 +2711,6 @@ function setMatchPointsInput(){
   const p2=document.getElementById('p2-score');
   if(p1)p1.placeholder=String(need);
   if(p2)p2.placeholder=String(Math.max(0,need-2));
-  renderQuickScorePresets();
 }
 function saveMatchPoints(){
   const el=document.getElementById('match-points-input');
@@ -2723,7 +2726,7 @@ function saveMatchPoints(){
 // ===================== SETTINGS =====================
 function deleteHistory(){if(!confirm('Delete ALL history? Ratings unchanged.'))return;state.history=[];renderAll();showToast('History deleted. 🧹','');}
 function resetAllRatings(){if(!confirm('Reset ALL ratings to 1000?'))return;state.players.forEach(p=>{p.rating=1000;p.wins=0;p.losses=0;});renderAll();showToast('Ratings reset. 🔄','');}
-function fullReset(){if(!confirm('FULL RESET  wipe everything?'))return;state={players:[],history:[],nextId:1,tournament:null,achievements:{},lowestRatings:{},matchPoints:10,theme:'neon',density:'comfort',dailyGoal:5,dailyDate:'',dailyCount:0,boldText:false,featureFlags:{}};ensureStateDefaults();setMatchPointsInput();renderAll();showToast('Fresh start! ✨','');}
+function fullReset(){if(!confirm('FULL RESET  wipe everything?'))return;state={players:[],history:[],nextId:1,tournament:null,achievements:{},lowestRatings:{},matchPoints:10,theme:'neon',density:'comfort',dailyGoal:5,dailyDate:'',dailyCount:0,boldText:false,mobileLock:true,featureFlags:{}};ensureStateDefaults();setMatchPointsInput();renderAll();showToast('Fresh start! ✨','');}
 function downloadJSON(){const b=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='rankmaster-pro-data.json';a.click();showToast('Exported successfully. 📦','success');}
 function importJSON(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{try{const d=JSON.parse(ev.target.result);if(d&&typeof d==='object'){state=normalizeImportedState(d);ensureStateDefaults();setMatchPointsInput();saveState();renderAll();showToast('Imported + migrated successfully. 🎉','success');}else showToast('Invalid file!','error');}catch{showToast("Couldn't read that file",'error');}};r.readAsText(f);e.target.value='';}
 function formatTime(d){return d.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' '+d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});}
