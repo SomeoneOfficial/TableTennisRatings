@@ -696,10 +696,10 @@ body.feature-party .card-lg,body.feature-party .settings-section{box-shadow:0 0 
 
 <div class="tabs-wrap">
 <div class="tabs">
-  <div class="tab active"  onclick="switchTab('leaderboard')">🏆 Board</div>
+  <div class="tab active"  onclick="switchTab('leaderboard')">🏆 Leaderboard</div>
   <div class="tab"         onclick="switchTab('match')">⚔️ Match</div>
   <div class="tab"         onclick="switchTab('history')">📜 History</div>
-  <div class="tab"         onclick="switchTab('tournament')">🥇 Tour</div>
+  <div class="tab"         onclick="switchTab('tournament')">🥇 Tournament</div>
   <div class="tab"         onclick="switchTab('achievements')">🏅 Badges</div>
 </div>
 </div>
@@ -711,16 +711,11 @@ body.feature-party .card-lg,body.feature-party .settings-section{box-shadow:0 0 
 
 <!-- MATCH -->
 <div id="tab-match" class="tab-content" style="display:none">
+  
   <div class="card-lg">
     <h2 class="card-title">⚔️ Log a Match</h2>
-    <div class="match-toolbar">
-      <button class="btn match-action-btn" onclick="openSpinner()">🎲 Spin Matchup</button>
-      <button class="btn match-action-btn" onclick="swapScores()">🔁 Swap Scores</button>
-      <button class="btn match-action-btn" onclick="loadPreviousMatchSettings()">🕘 Load Previous Match</button>
-      <button class="btn match-action-btn" id="pred-toggle-btn" onclick="togglePredictionVisibility()">📈 Show Win Probability</button>
-    </div>
-
-    <!-- Best-of series -->
+  <!-- Best-of series -->
+   
     <div style="margin-bottom:14px">
       <div style="font-size:.75rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Best-Of Series</div>
       <div class="series-selector">
@@ -731,6 +726,24 @@ body.feature-party .card-lg,body.feature-party .settings-section{box-shadow:0 0 
         <div class="series-opt" data-series="9" onclick="setSeries(9)">Best of 9</div>
       </div>
     </div>
+
+
+    <div class="match-toolbar">
+      <button class="btn match-action-btn" onclick="openSpinner()" >🎲 Spin Matchup</button>
+      
+      <button class="btn match-action-btn" id="pred-toggle-btn" onclick="togglePredictionVisibility()">📈 Show Win Probability</button>
+      
+
+    </div>
+
+
+    <div  style="margin-top:30px; margin-bottom: 10px;">
+      <button class="btn match-action-btn" style = "padding: 10px 30px;" onclick="loadPreviousMatchSettings()">🕘 Load Previous Match</button>
+
+      <button class="btn match-action-btn" style = "padding: 10px 45px;" onclick="swapScores()">🔁 Swap Scores</button>
+    </div>
+
+    
 
     <!-- Player selection  double decker -->
     <div class="match-layout" style="margin-bottom:14px;">
@@ -2496,6 +2509,7 @@ function renderLeaderboard(){
     const ms=state.history.filter(h=>(h.p1id===p.id||h.p2id===p.id)&&!h.manualAdjust);
     const lastMatch=ms[ms.length-1];
     const lastDelta=lastMatch?(lastMatch.p1id===p.id?lastMatch.p1delta:lastMatch.p2delta):null;
+
     return`<div class="player-card ${rc}" onclick="openProfile(${p.id})" style="cursor:pointer">
       <div class="rank-badge">${i===0?'<span class="rank-crown"></span>':''}#${i+1}</div>
       <div class="player-avatar" style="background:${p.color}20;color:${p.color};border-color:${p.color}50">
